@@ -8,7 +8,7 @@ import getRawBody from 'raw-body'; // tslint:disable-line import-name
 import { RequestInfo, ResponseInfo } from '../steno';
 import { promisify } from 'util';
 import { v4 as uuid } from 'uuid';
-import { isEmptyObject, NotOptionalIncomingHttpHeaders  } from '../util';
+import { isEmptyObject, NotOptionalIncomingHttpHeaders } from '../util';
 
 const log = debug('steno:interaction-catalog');
 
@@ -163,7 +163,7 @@ const ignoredHeaders = ['host'];
  * @param actual
  */
 function matchHeaders(pattern: NotOptionalIncomingHttpHeaders,
-                      actual: NotOptionalIncomingHttpHeaders): boolean {
+  actual: NotOptionalIncomingHttpHeaders): boolean {
   for (const key in pattern) {
     if (pattern.hasOwnProperty(key)) {
       if (ignoredHeaders.includes(key)) { continue; }
@@ -243,7 +243,7 @@ export class InteractionCatalog extends EventEmitter {
         this.interactionHistory = [];
         this.checkTriggers();
       })
-      .then(() => {}); // tslint:disable-line no-empty
+      .then(() => { }); // tslint:disable-line no-empty
   }
 
   /**

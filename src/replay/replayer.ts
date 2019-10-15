@@ -4,8 +4,10 @@ import express from 'express';
 import { createServer, IncomingMessage, Server } from 'http';
 import { Service, responseBodyToString } from '../steno';
 import { format as urlFormat, parse as urlParse, Url } from 'url';
-import { flattenHeaderValues, requestFunctionForTargetUrl, startServer, cloneJSON, PrintFn,
-  RequestFn } from '../util';
+import {
+  flattenHeaderValues, requestFunctionForTargetUrl, startServer, cloneJSON, PrintFn,
+  RequestFn
+} from '../util';
 import { Interaction, InteractionCatalog } from './interaction-catalog';
 import { Device } from '../controller';
 
@@ -67,18 +69,18 @@ export class Replayer implements Service, Device {
       startServer(this.server, this.port),
       this.catalog.load(),
     ])
-    .then(() => {
-      this.print(`Listening for outgoing requests on port ${this.port}`);
-      this.print(`Incoming requests sent to: ${urlFormat(this.targetUrl)}`);
-    })
-    .catch((error) => {
-      if (error.code === 'ECATALOGNOPATH') {
-        log(`starting replayer with a scenario name that wasn\'t found: ${error.message}`);
-        return;
-      }
-      throw error;
-    })
-    .then(() => {}); // tslint:disable-line no-empty
+      .then(() => {
+        this.print(`Listening for outgoing requests on port ${this.port}`);
+        this.print(`Incoming requests sent to: ${urlFormat(this.targetUrl)}`);
+      })
+      .catch((error) => {
+        if (error.code === 'ECATALOGNOPATH') {
+          log(`starting replayer with a scenario name that wasn\'t found: ${error.message}`);
+          return;
+        }
+        throw error;
+      })
+      .then(() => { }); // tslint:disable-line no-empty
   }
 
   /**
@@ -172,6 +174,9 @@ export class Replayer implements Service, Device {
       } else {
         next();
       }
+    });
+    app.use((_req, res, _next) => {
+      res.end('');
     });
 
     return app;

@@ -27,7 +27,7 @@ const log = debug('steno:http-serializer');
 function serializeHeaders(headers: IncomingHttpHeaders): string {
   return Object.getOwnPropertyNames(headers).reduce((str, key) => {
     const val = headers[key];
-    return `${ str.length !== 0 ? str + '\n' : ''}${key}: ${val}`;
+    return `${str.length !== 0 ? str + '\n' : ''}${key}: ${val}`;
   }, '');
 }
 
@@ -102,7 +102,7 @@ export class HttpSerializer {
    * @returns promise which fulfills when the serializer is ready
    */
   public initialize(): Promise<void> {
-    return createDirectory(this.storagePath).then(() => {}); // tslint:disable-line no-empty
+    return createDirectory(this.storagePath).then(() => { }); // tslint:disable-line no-empty
   }
 
   /**
@@ -134,8 +134,8 @@ export class HttpSerializer {
     createDestination(baseFilename)
       .then((destination: Destination) => {
         this.pendingRequestDestinations.set(requestInfo.id, destination);
-        destination.writeStream.write(data, (error: Error | undefined) => {
-          if (error !== undefined) {
+        destination.writeStream.write(data, (error: Error | null | undefined) => {
+          if (error !== undefined && error !== null) {
             log(`write chunk error for file ${destination.filename}: ${error.message}`);
           }
         });
