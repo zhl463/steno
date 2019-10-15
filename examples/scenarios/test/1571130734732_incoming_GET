@@ -1,0 +1,20 @@
+GET /?test=2 HTTP/1.1
+accept: application/json, text/plain, */*
+user-agent: axios/0.19.0
+host: 127.0.0.1:3000
+connection: close
+
+""
+
+-----
+
+HTTP/1.1 200 OK
+vary: Origin
+access-control-allow-credentials: true
+x-content-type-options: nosniff
+content-type: application/json; charset=utf-8
+content-length: 141
+date: Tue, 15 Oct 2019 09:12:14 GMT
+connection: close
+
+"[\"LICENSE\",\"README.md\",\"bin\",\"build\",\"docs\",\"examples\",\"node_modules\",\"package-lock.json\",\"package.json\",\"src\",\"tsconfig.json\",\"tslint.json\"]"
