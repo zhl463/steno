@@ -10,7 +10,8 @@ const replayer = new Replayer({
   await replayer
     .setScenarioName('test1')
     .trigger(() => axios.get('http://127.0.0.1:5000?test=2'))
-    .then((history) => console.log(history));
+    .then((history) => console.log(history))
+    .catch(e => console.log(e.message))
 
   await replayer
     .setScenarioName('test')

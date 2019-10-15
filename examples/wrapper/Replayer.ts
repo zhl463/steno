@@ -16,6 +16,7 @@ interface IReplayer {
 
 export default class Replayer {
   private scenariosDir: string;
+  private timeout: number = 2000;
   protected replayer: RealReplayer;
   protected ready: boolean;
   constructor(props: IReplayer) {
@@ -43,7 +44,7 @@ export default class Replayer {
       await this.start();
     }
     await request();
-    await sleep(2000);
+    await sleep(this.timeout);
     const history = this.replayer.getHistory();
     this.replayer.reset();
     return history;
@@ -51,5 +52,9 @@ export default class Replayer {
 
   public shutdown(): void {
     process.exit(0);
+  }
+
+  public setTimeout(time: number): void {
+    this.timeout = time;
   }
 }
