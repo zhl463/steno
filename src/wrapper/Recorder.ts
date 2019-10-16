@@ -1,7 +1,7 @@
 
 import path from 'path';
 
-import { Recorder as RealRecorder } from '../../src';
+import { Recorder as RealRecorder } from '../record/recorder';
 
 interface IRecorder {
   incomingTargetUrl: string;
@@ -11,7 +11,7 @@ interface IRecorder {
   scenariosDir?: string;
 }
 
-export default class Recorder {
+export class Recorder {
   protected recorder: RealRecorder;
   protected ready: boolean;
   private scenariosDir: string;

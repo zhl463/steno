@@ -1,6 +1,5 @@
 import axios from 'axios';
-import path from 'path';
-import Recorder from './wrapper/Recorder';
+import { Recorder } from '../src';
 
 const recorder = new Recorder({
   incomingTargetUrl: 'http://127.0.0.1:5500/',

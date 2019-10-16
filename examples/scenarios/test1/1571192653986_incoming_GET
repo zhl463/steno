@@ -14,7 +14,7 @@ access-control-allow-credentials: true
 x-content-type-options: nosniff
 content-type: application/json; charset=utf-8
 content-length: 141
-date: Tue, 15 Oct 2019 09:12:14 GMT
+date: Wed, 16 Oct 2019 02:24:13 GMT
 connection: close
 
 "[\"LICENSE\",\"README.md\",\"bin\",\"build\",\"docs\",\"examples\",\"node_modules\",\"package-lock.json\",\"package.json\",\"src\",\"tsconfig.json\",\"tslint.json\"]"

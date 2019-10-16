@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Replayer from './wrapper/Replayer';
+import { Replayer } from '../src';
 
 const replayer = new Replayer({
   targetUrl: 'http://127.0.0.1:5500',
@@ -11,7 +11,7 @@ const replayer = new Replayer({
     .setScenarioName('test1')
     .trigger(() => axios.get('http://127.0.0.1:5000?test=2'))
     .then((history) => console.log(history))
-    .catch(e => console.log(e.message))
+    .catch(e => console.log(e.message));
 
   await replayer
     .setScenarioName('test')

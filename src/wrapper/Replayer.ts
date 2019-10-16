@@ -1,6 +1,5 @@
 import path from 'path';
-import { Replayer as RealReplayer } from '../../src';
-import { History } from '../../src/replay/replayer';
+import { Replayer as RealReplayer, History } from '../replay/replayer';
 
 function sleep(time: number): Promise<any> {
   return new Promise((resolve) => {
@@ -14,7 +13,7 @@ interface IReplayer {
   scenariosDir?: string;
 }
 
-export default class Replayer {
+export class Replayer {
   private scenariosDir: string;
   private timeout: number = 2000;
   protected replayer: RealReplayer;
