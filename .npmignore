@@ -1,0 +1,11 @@
+.github
+.vscode
+bin
+docs
+examples
+node_modules/
+src/
+.gitignore
+.npmignore
+.nuimrc
+.travis.yml

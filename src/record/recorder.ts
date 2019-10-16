@@ -1,11 +1,11 @@
-// import debug from 'debug';
+import debug from 'debug';
 import { Service, StenoHook } from '../steno';
 import { Device } from '../controller';
 import { assignErrorIdentifier, PrintFn } from '../util';
 import { createProxy, HttpProxy, ProxyTargetConfig } from './http-proxy';
 import { HttpSerializer } from './http-serializer';
 
-// const log = debug('steno:recorder');
+const log = debug('steno:recorder');
 
 /**
  * Records bidirectional HTTP traffic to disk as a man-in-the-middle. A recorder is composed of two
@@ -37,7 +37,7 @@ export class Recorder implements Service, Device {
     storagePath: string,
     // TODO: more specific type
     hooks: StenoHook[],
-    print: PrintFn = console.log,
+    print: PrintFn = log,
   ) {
     // TODO: use an enum to describe the set of serializer hooks
     const serializerHooks = hooks.filter(hook => ['serializerRawRequest'].includes(hook.hookType));

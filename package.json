@@ -1,22 +1,23 @@
 {
-  "name": "steno",
-  "version": "1.0.0",
+  "name": "steno-x",
+  "version": "0.0.2",
   "description": "developer tool for integration testing of Slack Apps",
   "repository": "https://github.com/MicleMing/steno.git",
   "bin": {
     "steno": "bin/steno"
   },
+  "types": "./build/src/index.d.ts",
+  "main": "./build/src/index.js",
   "scripts": {
     "test": "npm run lint && npm run build && echo \"Error: no test specified\"",
     "build": "tsc -p tsconfig.json",
-    "postbuild": "preprocess -f build/analytics.js -d build/analytics.js -t js",
     "clean": "shx rm -rf build",
     "watch": "tsc -w",
     "lint": "tslint --project . src/**/*.ts",
     "start": "node bin/steno",
     "pkg": "npm run clean && npm run lint && npm run build && pkg --out-path pkg ."
   },
-  "author": "Ankur Oberoi <aoberoi@gmail.com>",
+  "author": "fzulanming@gmail",
   "license": "MIT",
   "engines": {
     "node": "^11.1.0"

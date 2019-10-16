@@ -27,15 +27,15 @@ export default async function main(): Promise<void> {
       alias: 'app',
       default: 'localhost:5000',
       desc: 'The internal URL where your application is listening. In record mode, requests ' +
-            'served from in-port are forwarded to this URL. In replay mode, incoming ' +
-            'interactions\' requests are sent to this URL.',
+        'served from in-port are forwarded to this URL. In replay mode, incoming ' +
+        'interactions\' requests are sent to this URL.',
       string: true,
       global: true,
     })
     .option('external-url', {
       default: 'https://slack.com',
       desc: 'The external URL to which steno will forward requests that are recieved on out-port. ' +
-            'Only valid in recoed mode.',
+        'Only valid in recoed mode.',
       string: true,
       global: true,
     })
@@ -43,7 +43,7 @@ export default async function main(): Promise<void> {
       alias: 'in',
       default: '3010',
       desc: 'The port where incoming requests are served by forwarding to the internal URL. Only ' +
-            'valid in record mode.',
+        'valid in record mode.',
       string: true,
       global: true,
     })
@@ -51,8 +51,8 @@ export default async function main(): Promise<void> {
       alias: 'out',
       default: '3000',
       desc: 'The port where outgoing requests are served either (in record mode) by forwarding ' +
-            'to the external service (Slack API) or (in replay mode) by responding from matched ' +
-            'interactions in the current scenario.',
+        'to the external service (Slack API) or (in replay mode) by responding from matched ' +
+        'interactions in the current scenario.',
       string: true,
       global: true,
     })
@@ -66,7 +66,7 @@ export default async function main(): Promise<void> {
     .option('scenario-dir', {
       default: './scenarios',
       desc: 'The directory where all scenarios are recorded to or replayed from. Relative to ' +
-            'current working directory.',
+        'current working directory.',
       normalize: true,
       string: true,
       global: true,
@@ -74,7 +74,7 @@ export default async function main(): Promise<void> {
     .option('scenario-name', {
       default: 'untitled_scenario',
       desc: 'The initial scenario. This name is used for the subdirectory of scenario-dir where ' +
-            'interactions will be recorded to or replayed from.',
+        'interactions will be recorded to or replayed from.',
       string: true,
       global: true,
     })
@@ -82,16 +82,16 @@ export default async function main(): Promise<void> {
     .option('slack-replace-tokens', {
       default: false,
       desc: 'Whether to replace Slack API tokens seen in request bodies. NOTE: When this option ' +
-            'is set, sensitive data may appear on stdout. Only valid in record mode.',
+        'is set, sensitive data may appear on stdout. Only valid in record mode.',
       boolean: true,
       global: true,
     })
     .option('slack-detect-subdomain', {
       default: true,
       desc: 'Whether to replace the subdomain in outgoing requests to Slack based on patterns in ' +
-            'the path. This must be set in order for incoming webhooks, slash command request ' +
-            'URLs, and interactive component request URLs to proxy correctly. Only valid in ' +
-            'record mode.',
+        'the path. This must be set in order for incoming webhooks, slash command request ' +
+        'URLs, and interactive component request URLs to proxy correctly. Only valid in ' +
+        'record mode.',
       boolean: true,
       global: true,
     })
@@ -100,8 +100,8 @@ export default async function main(): Promise<void> {
       appBaseUrl: {
         demandOption: true,
         desc: 'The base URL where all incoming requests from the Slack Platform are targetted. ' +
-              'Incoming requests have the protocol, hostname, and port removed, and are sent to ' +
-              'a combination of this URL and the path. (Alias for option internal-url)',
+          'Incoming requests have the protocol, hostname, and port removed, and are sent to ' +
+          'a combination of this URL and the path. (Alias for option internal-url)',
         string: true,
       },
     })
@@ -109,16 +109,16 @@ export default async function main(): Promise<void> {
       appBaseUrl: {
         demandOption: true,
         desc: 'The base URL where all recorded requests from the replaying server are targetted. ' +
-              '(Alias for option internal-url)',
+          '(Alias for option internal-url)',
         string: true,
       },
     })
     .example('$0 --record', 'Starts steno in record mode with defaults for the control-port, ' +
-            'in-port, out-port, internal-url, scenario-dir, and scenario-name.')
+      'in-port, out-port, internal-url, scenario-dir, and scenario-name.')
     .example('$0 --record --app localhost:3000 --out 5000', 'Starts steno in record mode and  ' +
-            'customizes the internal-url and out-port')
+      'customizes the internal-url and out-port')
     .example('$0 --replay', 'Starts steno in replay mode with defaults for the control-port, ' +
-            'out-port, internal-url, scenario-dir, and scenario-name.')
+      'out-port, internal-url, scenario-dir, and scenario-name.')
     .strict()
     // TODO: enable the completion functionality
     // .completion()
@@ -154,20 +154,20 @@ export default async function main(): Promise<void> {
     return;
   }
 
-  const internalUrl = normalizeUrl(argv.internalUrl || argv.appBaseUrl);
-  const externalUrl = normalizeUrl(argv.externalUrl);
+  const internalUrl = normalizeUrl(argv['internal-url']);
+  const externalUrl = normalizeUrl(argv['external-url']);
 
   // Load hooks
   const hooks: StenoHook[] = await (() => {
     // TODO: lots of code repetition to reduce
     let loading: Promise<StenoHook[]> = Promise.resolve([]);
-    if (argv.slackDetectSubdomain) {
+    if (argv['slack-detect-subdomain']) {
       loading = loading.then(loaded => import('./hooks/slack-detect-subdomain').then((module) => {
         loaded.push(module.createHook(externalUrl));
         return loaded;
       }));
     }
-    if (argv.slackReplaceTokens) {
+    if (argv['slack-replace-tokens']) {
       // NOTE: what about responses that contain a token? currently, this is only the `oauth.access`
       // and `oauth.token` Web API methods.
       loading = loading.then(loaded => import('./hooks/slack-replace-tokens').then((module) => {
@@ -179,7 +179,7 @@ export default async function main(): Promise<void> {
   })();
 
   const controller = createController(
-    mode, normalizePort(argv.controlPort), argv.scenarioName, argv.scenarioDir,
+    mode, normalizePort(argv.controlPort), argv['scenario-name'], argv['scenario-dir'],
     internalUrl, normalizePort(argv.inPort),
     externalUrl, normalizePort(argv.outPort),
     hooks,
