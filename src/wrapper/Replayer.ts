@@ -50,10 +50,11 @@ export class Replayer {
   }
 
   public shutdown(): void {
-    process.exit(0);
+    this.replayer.server.close();
   }
 
-  public setTimeout(time: number): void {
+  public setTimeout(time: number): Replayer {
     this.timeout = time;
+    return this;
   }
 }

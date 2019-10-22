@@ -33,7 +33,7 @@ export interface History {
  */
 export class Replayer implements Service, Device {
   /** the underlying HTTP server */
-  private server: Server;
+  public server: Server;
   /** an express app used to handle outgoing requests */
   private app: express.Application;
   /** the port where the server is listening */

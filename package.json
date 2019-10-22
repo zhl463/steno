@@ -1,6 +1,6 @@
 {
   "name": "steno-x",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "developer tool for integration testing of Slack Apps",
   "repository": "https://github.com/MicleMing/steno.git",
   "bin": {
