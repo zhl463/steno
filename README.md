@@ -1,15 +1,48 @@
-# Steno
+# Steno-x
+With `Steno-x`, you can record a request at first time using `Recorder`. Then replay the response using the recorded request at first time using `Replayer`. `steno-x` can send the request which recorded at first and get the real response from server. It's useful to do `Interface testing`.
+## Record
+Record request
+```ts
+import { Recorder } from 'steno-x';
 
-[![Build Status](https://travis-ci.org/slackapi/steno.svg?branch=master)](https://travis-ci.org/slackapi/steno)
+const recorder = new Recorder({
+  incomingTargetUrl: targetApi, // The real api you want to request
+  incomingPort: recordProxy.incomingPort, // local port which listen the request
+  outgoingTargetUrl: targetApi, // unused now
+  outgoingPort: recordProxy.outgoingPort, // unused now
+});
 
-Steno is a tool for recording and replaying HTTP requests and responses, to and from the Slack Platform, in order to
-generate testing fixtues for a Slack App.
+(async function () {
+  recorder.setScenarioName('teams_call');
+  await recorder.recording(recordInterface(proxyApi)); // record request
+  recorder.shutdown();
+})();
 
-In record mode, Steno is a two-way HTTP proxy that captures each request and response that passes through it (initiated
-from either the Slack App or the Slack Platform) and writes them to disk as **scenarios**.
+```
 
-In replay mode, Steno behaves as a stub for the Slack Platform by responding to HTTP requests from the Slack App, or by
-creating HTTP requests for your Slack App to handle. In this mode Steno also allows the developer to make assertions on
-each interaction in order to verify the behavior of the Slack App.
+## Replay
+Replay response using the recorded request and the do some testing.
+```ts
+import { Replayer } from 'steno-x';
 
-[Get started with Steno](https://slackapi.github.io/steno)
+const replayer = new Replayer({
+  targetUrl: targetApi, // The real api you want to request
+  port: `${replayProxy.port}`, // local port which listen the request
+  scenariosDir: path.join(__dirname, 'scenarios'), // Load scenarios which have been recorded
+});
+
+// test suite
+test('demo', async () => {
+  replayer
+    .setTimeout(4000)
+    .setScenarioName('teams_call')
+
+  const history = await replayer.trigger(recordInterface(proxyApi));
+  const response = history.interactions[0].response
+
+  const body = JSON.parse(response.body.toString());
+  expect(body.task.type).toEqual('continue');
+  replayer.shutdown();
+});
+
+```
