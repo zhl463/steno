@@ -42,7 +42,12 @@ export class Recorder {
     if (!this.ready) {
       await this.start();
     }
-    await request();
+    try {
+      await request();
+    } catch (e) {
+      console.error(e);
+      process.exit(1);
+    }
     return this;
   }
   public shutdown(): void {
