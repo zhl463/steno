@@ -287,18 +287,19 @@ export class InteractionCatalog extends EventEmitter {
           log('interaction eliminated: url');
           return false;
         }
-        if (!matchHeaders(requestInfo.headers, (req.headers as NotOptionalIncomingHttpHeaders))) {
-          log('interaction eliminated: headers');
-          return false;
-        }
-        if (requestInfo.body !== undefined) {
-          // raw body-parser will assign body to `{}` when there is none (such as GET requests)
-          const body = isEmptyObject(req.body) ? Buffer.from('') : req.body;
-          if (Buffer.compare(requestInfo.body, body) !== 0) {
-            log('interaction eliminated: body');
-            return false;
-          }
-        }
+        //We don't need it, Due to headers and requestInfo check, outgoing message can't receive
+        // if (!matchHeaders(requestInfo.headers, (req.headers as NotOptionalIncomingHttpHeaders))) {
+        //   log('interaction eliminated: headers');
+        //   return false;
+        // } 
+        // if (requestInfo.body !== undefined) {
+        //   // raw body-parser will assign body to `{}` when there is none (such as GET requests)
+        //   const body = isEmptyObject(req.body) ? Buffer.from('') : req.body;
+        //   if (Buffer.compare(requestInfo.body, body) !== 0) {
+        //     log('interaction eliminated: body');
+        //     return false;
+        //   }
+        // }
         return true;
       })
       .sort((a, b) => (b.timestamp as number) - (a.timestamp as number))

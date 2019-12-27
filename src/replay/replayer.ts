@@ -67,7 +67,8 @@ export class Replayer implements Service, Device {
     log(`replayer start with path: ${this.catalog.storagePath}`);
     return Promise.all([
       startServer(this.server, this.port),
-      this.catalog.load(),
+      // wrapper setScenarioName method use setStoragePath that would use load method again
+      // this.catalog.load(),
     ])
       .then(() => {
         this.print(`Listening for outgoing requests on port ${this.port}`);
