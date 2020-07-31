@@ -34,8 +34,8 @@ export class Replayer {
     this.ready = true;
     return this;
   }
-  public async setScenarioName(name: string): Promise<Replayer> {
-    await this.replayer.setStoragePath(path.join(this.scenariosDir, name));
+  public async setScenarioName(name: string, token?: string): Promise<Replayer> {
+    await this.replayer.setStoragePath(path.join(this.scenariosDir, name), token);
     return this;
   }
   public async trigger(request: Function): Promise<History> {
