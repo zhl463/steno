@@ -29,7 +29,7 @@ export interface Interaction {
  * @param requestData
  * @returns RequestInfo description of the request
  */
-function parseRequestData(requestData: string): RequestInfo {
+function parseRequestData(requestData: string, token?: string): RequestInfo {
   const [firstLine, ...lines] = requestData.split('\n');
   const [method, url, httpData] = firstLine.split(' ');
   let [, httpVersion] = httpData.split('/'); // tslint:disable-line prefer-const
@@ -41,9 +41,13 @@ function parseRequestData(requestData: string): RequestInfo {
   }
   const headerLines = lines.slice(0, emptyLineIndex);
   const headers = headerLines.reduce((h, line) => {
+    log('request header : ', h)
     const [key, valData] = line.split(': ');
     const val = valData.indexOf(', ') === -1 ? valData : valData.split(', ');
     h[key] = val;
+    if (key === 'x-api-security-token' && token ){
+      h[key] = `Bearer ${token}`;
+    }
     return h;
   }, ({} as NotOptionalIncomingHttpHeaders));
 
@@ -88,6 +92,7 @@ function parseResponseData(responseData: string, requestId: string): ResponseInf
   }
   const headerLines = lines.slice(0, emptyLineIndex);
   const headers = headerLines.reduce((h, line) => {
+    log('header line: ', h);
     const [key, valData] = line.split(': ');
     const val = valData.indexOf(', ') === -1 ? valData : valData.split(', ');
     h[key] = val;
@@ -125,7 +130,7 @@ function parseResponseData(responseData: string, requestId: string): ResponseInf
  * @param filename absolute path to file
  * @returns promise that resolves to the interaction read from disk
  */
-function parseFile(filename: string): Promise<Interaction | undefined> {
+function parseFile(filename: string, token? : string): Promise<Interaction | undefined> {
   const [timestampStr, direction] = basename(filename).split('_');
   const timestamp = parseInt(timestampStr, 10);
   return readFile(filename, 'utf-8')
@@ -140,7 +145,7 @@ function parseFile(filename: string): Promise<Interaction | undefined> {
         return Promise.resolve(undefined);
       }
 
-      const requestInfo = parseRequestData(requestData);
+      const requestInfo = parseRequestData(requestData, token);
       const responseInfo = parseResponseData(responseData, requestInfo.id);
 
       return Promise.resolve({
@@ -209,16 +214,16 @@ export class InteractionCatalog extends EventEmitter {
    * @param storagePath
    * @return promise that resolves when the interactions are loaded
    */
-  public loadPath(storagePath: string): Promise<void> {
+  public loadPath(storagePath: string, token?: string): Promise<void> {
     this.storagePath = storagePath;
-    return this.load();
+    return this.load(token);
   }
 
   /**
    * Loads interactions into the catalog from the storage path.
    * @return promise that resolves when the interactions are loaded
    */
-  public load(): Promise<void> {
+  public load(token?: string): Promise<void> {
     return readDir(this.storagePath)
       .catch((error) => {
         // if the scenario dir is missing, just continue as if its an empty scenario
@@ -233,7 +238,7 @@ export class InteractionCatalog extends EventEmitter {
         throw error;
       })
       .then((filenames) => {
-        return Promise.all(filenames.map(f => parseFile(resolvePath(this.storagePath, f))));
+        return Promise.all(filenames.map(f => parseFile(resolvePath(this.storagePath, f), token)));
       })
       .then(interactionsAndSkipped => interactionsAndSkipped.filter(i => i !== undefined))
       .then((interactions) => {

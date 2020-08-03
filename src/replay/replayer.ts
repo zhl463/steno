@@ -89,8 +89,8 @@ export class Replayer implements Service, Device {
    * @param storagePath absolute path on disk
    * @returns promise that resolves when the replayer is ready to replay requests and responses
    */
-  public setStoragePath(newPath: string): Promise<void> {
-    return this.catalog.loadPath(newPath);
+  public setStoragePath(newPath: string, token?: string): Promise<void> {
+    return this.catalog.loadPath(newPath, token);
   }
 
   /**
