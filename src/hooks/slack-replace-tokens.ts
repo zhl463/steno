@@ -77,7 +77,8 @@ export function createHook(print: PrintFn): SerializerRawRequest {
       // 3. Other requests to the Web API include tokens in the URL-encoded query parameter
       const parsedUrl = urlParse(request.url);
       if (parsedUrl.search !== undefined) {
-        const queryParams = new URLSearchParams(parsedUrl.search);
+        const search = parsedUrl.search as string
+        const queryParams = new URLSearchParams(search);
         const token = queryParams.get('token');
         if (token !== null) {
           const replacement = replaceToken(token);
