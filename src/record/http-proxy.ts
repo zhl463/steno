@@ -68,7 +68,8 @@ export class HttpProxy extends EventEmitter {
       proxyReqOptions = this.requestInfoHook.processor(req, proxyReqOptions);
     }
 
-    proxyReqOptions.headers = fixRequestHeaders(proxyReqOptions.hostname, proxyReqOptions.headers);
+    const hostname = (proxyReqOptions.hostname) ? proxyReqOptions.hostname : undefined;
+    proxyReqOptions.headers = fixRequestHeaders(hostname, proxyReqOptions.headers);
 
     log('creating proxy request with options: %O', proxyReqOptions);
     const proxyRequest = this.requestFn(proxyReqOptions);
