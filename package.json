@@ -56,7 +56,6 @@
     "googleTrackingId": "UA-56978219-12"
   },
   "files": [
-    "**/*"
+    "build"
   ]
-  
 }
